@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, Modal, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { Calendar } from "react-native-calendars";
+import { useSettings } from "@/context/SettingsContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -29,7 +30,6 @@ function todayString() {
 }
 
 function formatDateLabel(dateStr) {
-  // dateStr like "2026-08-23" -> "Sunday, August 23"
   const [y, m, d] = dateStr.split("-").map(Number);
   const date = new Date(y, m - 1, d);
   return date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
@@ -37,10 +37,10 @@ function formatDateLabel(dateStr) {
 
 export default function Index() {
   const router = useRouter();
+  const { firstDay } = useSettings();
   const [entries, setEntries] = useState({});
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
-  // Modal state
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [draftState, setDraftState] = useState(null);
@@ -109,7 +109,7 @@ export default function Index() {
     if (ratio <= 0.2) {
       verdictTag = "Mostly clean";
       verdictColor = colors.clean.text;
-    } else if (ratio <= 0.5) {
+    } else if (ratio <= 0.7) {
       verdictTag = "Mixed month";
       verdictColor = colors.alcohol.text;
     } else {
@@ -122,9 +122,10 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        
         <View style={styles.heading}>
           <View>
-            <Text style={styles.headingText}>Hazy Days Tracking</Text>
+            <Text style={styles.headingText}>Calendar</Text>
             <Text style={styles.subText}>Tap a day to log</Text>
           </View>
         </View>
@@ -132,6 +133,7 @@ export default function Index() {
         <View style={styles.card}>
           <Calendar
             current={todayString()}
+            firstDay={firstDay}
             markingType="custom"
             markedDates={markedDates}
             onDayPress={(day) => openModalFor(day.dateString)}
@@ -274,8 +276,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingBottom: 12,
   },
-  headingText: { fontSize: 26, fontWeight: "bold", color: "#5d8366" },
-  subText: { fontSize: 16, color: "#7d7f7c" },
+  headingText: { fontSize: 25, fontWeight: 500, color: "#5d8366" },
+  subText: { fontSize: 14, color: "#7d7f7c" },
   card: {
     backgroundColor: colors.card,
     marginHorizontal: 16,

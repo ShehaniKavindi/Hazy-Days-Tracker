@@ -1,10 +1,10 @@
 import { Text, View, SafeAreaView, StyleSheet } from "react-native";
 
-export default function Partner() {
+export default function Profile() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Partner</Text>
+        <Text style={styles.title}>Profile</Text>
       </View>
     </SafeAreaView>
   );

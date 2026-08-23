@@ -1,9 +1,12 @@
 import { Stack } from "expo-router";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export default function RootLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <SettingsProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </SettingsProvider>
   );
 }

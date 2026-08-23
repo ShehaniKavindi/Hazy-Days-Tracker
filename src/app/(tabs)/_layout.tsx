@@ -12,33 +12,52 @@ export default function TabsLayout() {
         tabBarStyle: { backgroundColor: "#FFFFFF" },
       }}
     >
+      
       <Tabs.Screen
         name="index"
         options={{
-          title: "Calendar",
-          tabBarIcon: ({ color, size }) => (
+            headerTitle: "Hazy Days Tracking",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+            fontSize: 22,
+            fontWeight: "600",
+            },
+            tabBarLabel: "Calendar",
+            tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
-          ),
+            ),
         }}
-      />
-      <Tabs.Screen
-        name="partner"
+        />
+        <Tabs.Screen
+        name="profile"
         options={{
-          title: "Partner",
-          tabBarIcon: ({ color, size }) => (
+            headerTitle: "Hazy Days Tracking",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+            fontSize: 22,
+            fontWeight: "600",
+            },
+            tabBarLabel: "Profile",
+            tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
-          ),
+            ),
         }}
-      />
+        />
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
-          tabBarIcon: ({ color, size }) => (
+            headerTitle: "Hazy Days Tracking",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+            fontSize: 22,
+            fontWeight: "600",
+            },
+            tabBarLabel: "Settings",
+            tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />
-          ),
+            ),
         }}
-      />
+        />
     </Tabs>
   );
 }
