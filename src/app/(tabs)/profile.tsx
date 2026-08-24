@@ -1,4 +1,5 @@
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import { useEntries } from "@/context/EntriesContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -7,15 +8,62 @@ const colors = {
   textMuted: "#7C8878",
 };
 
-// Placeholder stats until entries are lifted into shared state.
-const stats = {
-  cleanDays: 42,
-  bestStreak: 14,
-  currentStreak: 7,
-  daysTracked: 61,
+function currentMonthString() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+const MIN_DAYS_FOR_MOOD = 3;
+
+const WAITING_MOOD = {
+  level: "waiting",
+  image: require("@/assets/images/emoticons/waiting.jpg"),
+  message:
+    "Hii~ I don't have enough to go on yet.\n\nLog at least 3 days this month and I'll let you know how you're doing <3",
 };
 
+const MOODS = [
+  {
+    level: "good",
+    minRatio: 0.8,
+    image: require("@/assets/images/emoticons/happy.jpg"),
+    message:
+      "Awww, look at youuu\nI'm so proud of you!\n\nYou've been doing so well.\nKeep going like this <3",
+  },
+  {
+    level: "mid",
+    minRatio: 0.5,
+    image: require("@/assets/images/emoticons/try harder.jpg"),
+    message:
+      "Okayyy… we can do better than this. \n\n Don't give up now. Try a little harder. \n\n I believe in you <3 ",
+  },
+  {
+    level: "disappointed",
+    minRatio: 0.2,
+    image: require("@/assets/images/emoticons/dissapointed.jpg"),
+    message:
+      "Umm… excuse me?? \nI'm actually disappointed in you. You know you can do better than this. I'm not giving up on you, but you seriously need to try harder. I'm watching you",
+  },
+  {
+    level: "ultimate",
+    minRatio: 0,
+    image: require("@/assets/images/emoticons/sad.jpg"),
+    message:
+      "Yyyyyyyyyy…  What are we DOING here, sir??\n I'm so disappointed in you. \nYou better behave and make me proud, okay? \n No more excuses.",
+  },
+];
+
+function getMood(cleanRatio) {
+  return MOODS.find((m) => cleanRatio >= m.minRatio) ?? MOODS[MOODS.length - 1];
+}
+
 export default function Profile() {
+  const { stats, getMonthCounts } = useEntries();
+
+  const { counts, loggedDays } = getMonthCounts(currentMonthString());
+  const cleanRatio = loggedDays > 0 ? counts.clean / loggedDays : 1;
+  const mood = loggedDays < MIN_DAYS_FOR_MOOD ? WAITING_MOOD : getMood(cleanRatio);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -38,7 +86,10 @@ export default function Profile() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>This month</Text>
-          <View style={styles.monthCard} />
+          <View style={styles.monthCard}>
+            <Image source={mood.image} style={styles.moodImage} resizeMode="cover" />
+            <Text style={styles.moodMessage}>{mood.message}</Text>
+          </View>
         </View>
 
         <TouchableOpacity style={styles.editButton}>
@@ -105,7 +156,22 @@ const styles = StyleSheet.create({
   monthCard: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    minHeight: 220,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    padding: 16,
+    minHeight: 120,
+  },
+  moodImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 42,
+  },
+  moodMessage: {
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 20,
+    color: colors.textMuted,
   },
 
   editButton: {

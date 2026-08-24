@@ -11,6 +11,7 @@ import {
   Alert,
 } from "react-native";
 import { useSettings } from "@/context/SettingsContext";
+import { useEntries } from "@/context/EntriesContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -43,6 +44,7 @@ function pad2(n) {
 
 export default function Settings() {
   const { weekStart, setWeekStart } = useSettings();
+  const { entries, clearAll } = useEntries();
 
   const [reminderOn, setReminderOn] = useState(false);
   const [reminderHour, setReminderHour] = useState(8);
@@ -55,9 +57,12 @@ export default function Settings() {
   const [accent, setAccent] = useState("sage");
 
   function handleExport() {
+    const count = Object.keys(entries).length;
     Alert.alert(
       "Export data",
-      "This will export your logged days once storage is wired up. Nothing to export yet.",
+      count === 0
+        ? "Nothing to export yet — log a day first."
+        : `You have ${count} logged day${count === 1 ? "" : "s"}. File export isn't wired up yet, but your data is safely tracked in the app.`,
     );
   }
 
@@ -71,7 +76,7 @@ export default function Settings() {
           text: "Clear all",
           style: "destructive",
           onPress: () => {
-            // No shared storage yet — nothing to clear.
+            clearAll();
             Alert.alert("Cleared", "All entries have been cleared.");
           },
         },
@@ -336,7 +341,7 @@ const styles = StyleSheet.create({
   headingText: { fontSize: 25, fontWeight: "500", color: "#5d8366" },
   subText: { fontSize: 14, color: "#7d7f7c" },
 
-  section: { marginTop: 8, marginHorizontal: 16 },
+  section: { marginTop: 10, marginHorizontal: 16 },
   sectionTitle: {
     fontSize: 12,
     fontWeight: "600",

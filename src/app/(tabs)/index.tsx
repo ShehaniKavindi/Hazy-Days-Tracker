@@ -3,6 +3,7 @@ import { Text, View, SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, Mod
 import { useRouter } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import { useSettings } from "@/context/SettingsContext";
+import { useEntries } from "@/context/EntriesContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -38,7 +39,7 @@ function formatDateLabel(dateStr) {
 export default function Index() {
   const router = useRouter();
   const { firstDay } = useSettings();
-  const [entries, setEntries] = useState({});
+  const { entries, setEntry } = useEntries();
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -59,15 +60,7 @@ export default function Index() {
 
   function confirmLog() {
     if (!selectedDate) return;
-    setEntries((prev) => {
-      const next = { ...prev };
-      if (draftState) {
-        next[selectedDate] = draftState;
-      } else {
-        delete next[selectedDate]; // no option picked = clear the day
-      }
-      return next;
-    });
+    setEntry(selectedDate, draftState);
     closeModal();
   }
 
