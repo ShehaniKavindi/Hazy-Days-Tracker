@@ -92,6 +92,5 @@ All data is stored locally on-device via `AsyncStorage` — nothing is sent to a
 - 🌙 **Dark mode** — a proper dark theme, ideally following system appearance settings. (The Settings screen already has a disabled "Coming soon" toggle for this.)
 - 🎨 **Live accent theming** — make the Settings accent color picker actually restyle the app instead of sitting unused.
 - 🔔 **Real notifications** — wire the reminder toggle up to scheduled local notifications instead of just a UI switch.
-- ✏️ **Edit profile** — let users change their name/avatar (currently static "Alex" placeholder on the Profile screen).
 - 📤 **Data export** — real CSV/JSON export from the Settings screen, not just a placeholder alert.
 - ☁️ **Backup/sync** — optional cloud backup so entries survive an uninstall or device switch.
