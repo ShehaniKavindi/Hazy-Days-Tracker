@@ -19,7 +19,7 @@ const WAITING_MOOD = {
   level: "waiting",
   image: require("@/assets/images/emoticons/waiting.jpg"),
   message:
-    "Hii~ I don't have enough to go on yet.\n\nLog at least 3 days this month and I'll let you know how you're doing <3",
+    "Hii I don't have enough to go on yet.\n\nLog at least 3 days this month and I'll let you know how you're doing <3",
 };
 
 const MOODS = [
