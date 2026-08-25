@@ -21,6 +21,20 @@ Built with [Expo](https://expo.dev) (SDK 55) and [Expo Router](https://docs.expo
 - `@react-native-async-storage/async-storage` for local persistence
 - Google Fonts (Poppins) via `@expo-google-fonts/poppins`
 
+### Screenshots
+
+| Calendar | Settings | Profile — proud |
+|---|---|---|
+| ![Calendar](./docs/screenshots/calendar.png) | ![Settings](./docs/screenshots/settings.png) | ![Proud message](./docs/screenshots/msg%20-%20proud.png) |
+
+| Profile — gentle warning | Profile — disappointed | Profile — dramatic |
+|---|---|---|
+| ![Warning message](./docs/screenshots/warning%20msg.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) |
+
+| Profile — no entries yet | Reminder time picker |
+|---|---|---|
+| ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | ![Edit Profile](./docs/screenshots/edit-profile.jpg) |  ![Timer set](./docs/screenshots/timer%20set.png) |
+
 ## Getting started
 
 1. **Install dependencies**
@@ -61,20 +75,6 @@ docs/                        # Additional project documentation
 ## Documentation
 
 Additional docs live in [`docs/`](./docs).
-
-### Screenshots
-
-| Calendar | Settings | Profile — proud |
-|---|---|---|
-| ![Calendar](./docs/screenshots/calendar.png) | ![Settings](./docs/screenshots/settings.png) | ![Proud message](./docs/screenshots/msg%20-%20proud.png) |
-
-| Profile — gentle warning | Profile — disappointed | Profile — dramatic |
-|---|---|---|
-| ![Warning message](./docs/screenshots/warning%20msg.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) |
-
-| Profile — no entries yet | Reminder time picker |
-|---|---|
-| ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | ![Timer set](./docs/screenshots/timer%20set.png) |
 
 ## Data & privacy
 
