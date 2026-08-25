@@ -17,8 +17,8 @@ export const AVATAR_OPTIONS = [
 ];
 
 const DEFAULT_PROFILE = {
-  name: "Alex",
-  avatarId: "pfp1",
+  name: "Idiot",
+  avatarId: "pfp2",
   nickname: "",
   goalNote: "",
 };
@@ -50,9 +50,7 @@ export function ProfileProvider({ children }) {
     })();
   }, []);
 
-  // Persist on every change, but only after the initial load has finished —
-  // same guard as EntriesContext, so we don't overwrite real saved data with
-  // the default profile before it's had a chance to load.
+
   useEffect(() => {
     if (!hasHydrated.current) return;
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(profile)).catch((err) => {
