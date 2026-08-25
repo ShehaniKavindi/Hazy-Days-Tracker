@@ -31,7 +31,7 @@ Built with [Expo](https://expo.dev) (SDK 55) and [Expo Router](https://docs.expo
 |---|---|---|
 | ![Warning message](./docs/screenshots/warning%20msg.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) |
 
-| Profile — no entries yet | Reminder time picker |
+| Profile — no entries yet | Edit Profile | Reminder time picker |
 |---|---|---|
 | ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | ![Edit Profile](./docs/screenshots/edit-profile.jpg) |  ![Timer set](./docs/screenshots/timer%20set.png) |
 
