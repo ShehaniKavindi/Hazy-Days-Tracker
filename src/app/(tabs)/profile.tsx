@@ -1,5 +1,7 @@
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 import { useEntries } from "@/context/EntriesContext";
+import { useProfile, getAvatarImage } from "@/context/ProfileContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -19,7 +21,7 @@ const WAITING_MOOD = {
   level: "waiting",
   image: require("@/assets/images/emoticons/waiting.jpg"),
   message:
-    "Hii I don't have enough to go on yet.\n\nLog at least 3 days this month and I'll let you know how you're doing <3",
+    "Hii~ I don't have enough to go on yet.\n\nLog at least 3 days this month and I'll let you know how you're doing <3",
 };
 
 const MOODS = [
@@ -58,23 +60,34 @@ function getMood(cleanRatio) {
 }
 
 export default function Profile() {
+  const router = useRouter();
   const { stats, getMonthCounts } = useEntries();
+  const { profile } = useProfile();
 
   const { counts, loggedDays } = getMonthCounts(currentMonthString());
   const cleanRatio = loggedDays > 0 ? counts.clean / loggedDays : 1;
   const mood = loggedDays < MIN_DAYS_FOR_MOOD ? WAITING_MOOD : getMood(cleanRatio);
+
+  // Address the user by their nickname if they set one, without baking it
+  // into every message string above.
+  const moodMessage = profile.nickname
+    ? `${profile.nickname},\n\n${mood.message}`
+    : mood.message;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.avatarSection}>
           <Image
-            source={require("@/assets/images/weed.jpg")}
+            source={getAvatarImage(profile.avatarId)}
             style={styles.avatar}
             resizeMode="cover"
           />
-          <Text style={styles.name}>Alex</Text>
+          <Text style={styles.name}>{profile.name}</Text>
           <Text style={styles.subText}>Tracking since March 2025</Text>
+          {profile.goalNote ? (
+            <Text style={styles.goalNote}>{profile.goalNote}</Text>
+          ) : null}
         </View>
 
         <View style={styles.statsGrid}>
@@ -88,11 +101,14 @@ export default function Profile() {
           <Text style={styles.sectionTitle}>This month</Text>
           <View style={styles.monthCard}>
             <Image source={mood.image} style={styles.moodImage} resizeMode="cover" />
-            <Text style={styles.moodMessage}>{mood.message}</Text>
+            <Text style={styles.moodMessage}>{moodMessage}</Text>
           </View>
         </View>
 
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push("/edit-profile")}
+        >
           <Text style={styles.editButtonText}>Edit profile</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -126,6 +142,14 @@ const styles = StyleSheet.create({
   },
   name: { fontSize: 24, fontWeight: "500", color: "#2F6B3E" },
   subText: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
+  goalNote: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: 8,
+    marginHorizontal: 32,
+    textAlign: "center",
+    fontStyle: "italic",
+  },
 
   statsGrid: {
     flexDirection: "row",
