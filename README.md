@@ -8,7 +8,7 @@ Built with [Expo](https://expo.dev) (SDK 55) and [Expo Router](https://docs.expo
 
 - **Calendar logging** — tap any day to mark it clean, weed, alcohol, or both. Color-coded legend and a monthly "verdict" (mostly clean / mixed / heavier month) based on your ratio for that month.
 - **Profile stats** — clean days, current streak, best streak, and total days tracked, all computed live from your logged entries.
-- **This month's mood** — a card that shifts tone (proud → gentle warning → disappointed → dramatic) based on this month's clean ratio.
+- **This month's mood** — a card that shifts tone (proud → gentle warning → disappointed → dramatic) based on this month's clean ratio, with a "waiting for data" state until at least 3 days are logged.
 - **Settings** — reminder toggle with a custom time picker, week start day (Sun/Mon), accent color picker, and data export/clear.
 - **Local persistence** — entries are saved on-device with `AsyncStorage`, so your history survives app restarts.
 
@@ -55,7 +55,26 @@ src/
 assets/
   images/
     emoticons/              # Mood card artwork
+docs/                        # Additional project documentation
 ```
+
+## Documentation
+
+Additional docs live in [`docs/`](./docs).
+
+### Screenshots
+
+| Calendar | Settings | Profile — proud |
+|---|---|---|
+| ![Calendar](./docs/screenshots/calendar.png) | ![Settings](./docs/screenshots/settings.png) | ![Proud message](./docs/screenshots/msg%20-%20proud.png) |
+
+| Profile — gentle warning | Profile — disappointed | Profile — dramatic |
+|---|---|---|
+| ![Warning message](./docs/screenshots/warning%20msg.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) |
+
+| Profile — no entries yet | Reminder time picker |
+|---|---|
+| ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | ![Timer set](./docs/screenshots/timer%20set.png) |
 
 ## Data & privacy
 
@@ -67,3 +86,12 @@ All data is stored locally on-device via `AsyncStorage` — nothing is sent to a
 - Reminder toggle doesn't yet schedule real notifications.
 - No real data export (CSV/JSON) yet — only local `AsyncStorage`.
 - Entries are stored as a single JSON blob; fine at current scale, but would need restructuring for very large histories.
+
+## Future enhancements
+
+- 🌙 **Dark mode** — a proper dark theme, ideally following system appearance settings. (The Settings screen already has a disabled "Coming soon" toggle for this.)
+- 🎨 **Live accent theming** — make the Settings accent color picker actually restyle the app instead of sitting unused.
+- 🔔 **Real notifications** — wire the reminder toggle up to scheduled local notifications instead of just a UI switch.
+- ✏️ **Edit profile** — let users change their name/avatar (currently static "Alex" placeholder on the Profile screen).
+- 📤 **Data export** — real CSV/JSON export from the Settings screen, not just a placeholder alert.
+- ☁️ **Backup/sync** — optional cloud backup so entries survive an uninstall or device switch.
