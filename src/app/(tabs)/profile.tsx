@@ -1,5 +1,6 @@
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useSettings } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
 import { useProfile, getAvatarImage } from "@/context/ProfileContext";
 
@@ -63,10 +64,11 @@ export default function Profile() {
   const router = useRouter();
   const { stats, getMonthCounts } = useEntries();
   const { profile } = useProfile();
+  const { accentColor } = useSettings();
 
   const { counts, loggedDays } = getMonthCounts(currentMonthString());
   const cleanRatio = loggedDays > 0 ? counts.clean / loggedDays : 1;
-  const mood = loggedDays < MIN_DAYS_FOR_MOOD ? WAITING_MOOD : getMood(cleanRatio);
+  const mood = loggedDays < MIN_DAYS_FOR_MOOD ? WAITING_MOOD : getMood(cleanRatio); 
 
   // Address the user by their nickname if they set one, without baking it
   // into every message string above.
@@ -83,7 +85,7 @@ export default function Profile() {
             style={styles.avatar}
             resizeMode="cover"
           />
-          <Text style={styles.name}>{profile.name}</Text>
+          <Text style={[styles.name, { color: accentColor }]}>{profile.name}</Text>
           <Text style={styles.subText}>Tracking since March 2025</Text>
           {profile.goalNote ? (
             <Text style={styles.goalNote}>{profile.goalNote}</Text>
@@ -91,7 +93,7 @@ export default function Profile() {
         </View>
 
         <View style={styles.statsGrid}>
-          <StatCard num={stats.cleanDays} label="clean days" color="#2F6B3E" />
+          <StatCard num={stats.cleanDays} label="clean days" color={accentColor} />
           <StatCard num={stats.bestStreak} label="best streak" color="#B5537D" />
           <StatCard num={stats.currentStreak} label="current streak" color="#96591C" />
           <StatCard num={stats.daysTracked} label="days tracked" color="#9C4A3D" />
@@ -106,7 +108,7 @@ export default function Profile() {
         </View>
 
         <TouchableOpacity
-          style={styles.editButton}
+          style={[styles.editButton, { backgroundColor: accentColor }]}
           onPress={() => router.push("/edit-profile")}
         >
           <Text style={styles.editButtonText}>Edit profile</Text>

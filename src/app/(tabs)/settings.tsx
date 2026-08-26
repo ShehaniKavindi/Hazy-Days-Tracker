@@ -10,7 +10,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { useSettings } from "@/context/SettingsContext";
+import { useSettings, ACCENTS } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
 
 const colors = {
@@ -22,13 +22,6 @@ const colors = {
   accentDefault: "#8FC79D",
   danger: "#9C4A3D",
 };
-
-const ACCENTS = [
-  { key: "sage", label: "Sage", value: "#8FC79D" },
-  { key: "meadow", label: "Meadow", value: "#2F6B3E" },
-  { key: "amber", label: "Amber", value: "#D99A4E" },
-  { key: "rose", label: "Rose", value: "#B5537D" },
-];
 
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 1); // 1-12
 const MINUTES = Array.from({ length: 60 }, (_, i) => i); // 0-59
@@ -43,7 +36,7 @@ function pad2(n) {
 }
 
 export default function Settings() {
-  const { weekStart, setWeekStart } = useSettings();
+  const { weekStart, setWeekStart, accent, setAccent, accentColor } = useSettings();
   const { entries, clearAll } = useEntries();
 
   const [reminderOn, setReminderOn] = useState(false);
@@ -53,8 +46,6 @@ export default function Settings() {
   const [timeModalVisible, setTimeModalVisible] = useState(false);
 
   const reminderTime = `${reminderHour}:${pad2(reminderMinute)} ${reminderPeriod}`;
-
-  const [accent, setAccent] = useState("sage");
 
   function handleExport() {
     const count = Object.keys(entries).length;
@@ -101,7 +92,7 @@ export default function Settings() {
             <Switch
               value={reminderOn}
               onValueChange={setReminderOn}
-              trackColor={{ false: "#D8DED9", true: colors.accentDefault }}
+              trackColor={{ false: "#D8DED9", true: accentColor }}
               thumbColor="#FFFFFF"
             />
           </Row>
@@ -220,7 +211,7 @@ export default function Settings() {
             </View>
 
             <TouchableOpacity
-              style={styles.confirmButton}
+              style={[styles.confirmButton, { backgroundColor: accentColor }]}
               onPress={() => setTimeModalVisible(false)}
             >
               <Text style={styles.confirmButtonText}>Done</Text>

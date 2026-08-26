@@ -1,13 +1,16 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useSettings } from "@/context/SettingsContext";
 
 export default function TabsLayout() {
+  const { accentColor } = useSettings();
+
   return (
     <Tabs
       screenOptions={{
-        headerStyle: { backgroundColor: "#8FC79D" },
+        headerStyle: { backgroundColor: accentColor },
         headerTintColor: "#FFFFFF",
-        tabBarActiveTintColor: "#2F6B3E",
+        tabBarActiveTintColor: accentColor,
         tabBarInactiveTintColor: "#A2AC9C",
         tabBarStyle: { backgroundColor: "#FFFFFF" },
       }}

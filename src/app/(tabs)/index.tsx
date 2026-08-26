@@ -38,7 +38,7 @@ function formatDateLabel(dateStr) {
 
 export default function Index() {
   const router = useRouter();
-  const { firstDay } = useSettings();
+  const { firstDay, accentColor } = useSettings();
   const { entries, setEntry } = useEntries();
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
@@ -136,9 +136,9 @@ export default function Index() {
               textSectionTitleColor: colors.textMuted,
               dayTextColor: colors.textPrimary,
               textDisabledColor: "#D8DED9",
-              todayTextColor: colors.weed.text,
+              todayTextColor: accentColor,
               monthTextColor: colors.textPrimary,
-              arrowColor: colors.weed.text,
+              arrowColor: accentColor,
               textDayFontWeight: "400",
               textMonthFontWeight: "500",
               textDayHeaderFontWeight: "500",
@@ -172,7 +172,7 @@ export default function Index() {
         </View>
 
         <TouchableOpacity
-          style={styles.logButton}
+          style={[styles.logButton, { backgroundColor: accentColor }]}
           onPress={() => openModalFor(todayString())}
         >
           <Text style={styles.logButtonText}>Log today</Text>
@@ -227,7 +227,7 @@ export default function Index() {
               <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={confirmLog}>
+              <TouchableOpacity style={[styles.confirmButton, { backgroundColor: accentColor }]} onPress={confirmLog}>
                 <Text style={styles.confirmButtonText}>Log</Text>
               </TouchableOpacity>
             </View>

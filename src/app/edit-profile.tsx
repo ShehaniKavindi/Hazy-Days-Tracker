@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useProfile, AVATAR_OPTIONS } from "@/context/ProfileContext";
+import { useSettings } from "@/context/SettingsContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -23,6 +24,7 @@ const colors = {
 export default function EditProfile() {
   const router = useRouter();
   const { profile, updateProfile } = useProfile();
+  const { accentColor } = useSettings();
 
   const [name, setName] = useState(profile.name);
   const [nickname, setNickname] = useState(profile.nickname);
@@ -50,7 +52,7 @@ export default function EditProfile() {
               onPress={() => setAvatarId(option.id)}
               style={[
                 styles.avatarOption,
-                avatarId === option.id && styles.avatarOptionSelected,
+                avatarId === option.id && { borderColor: accentColor },
               ]}
             >
               <Image
@@ -91,7 +93,7 @@ export default function EditProfile() {
           numberOfLines={4}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <TouchableOpacity style={[styles.saveButton, { backgroundColor: accentColor }]} onPress={handleSave}>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
 
@@ -127,9 +129,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 3,
     borderColor: "transparent",
-  },
-  avatarOptionSelected: {
-    borderColor: colors.accent,
   },
   avatarOptionImage: {
     width: "100%",
