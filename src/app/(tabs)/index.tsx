@@ -38,7 +38,7 @@ function formatDateLabel(dateStr) {
 
 export default function Index() {
   const router = useRouter();
-  const { firstDay, accentColor } = useSettings();
+  const { firstDay, accentColor, headingColor } = useSettings();
   const { entries, setEntry } = useEntries();
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
@@ -118,7 +118,7 @@ export default function Index() {
         
         <View style={styles.heading}>
           <View>
-            <Text style={styles.headingText}>Calendar</Text>
+            <Text style={[styles.headingText, { color: headingColor }]}>Calendar</Text>
             <Text style={styles.subText}>Tap a day to log</Text>
           </View>
         </View>
@@ -138,7 +138,7 @@ export default function Index() {
               textDisabledColor: "#D8DED9",
               todayTextColor: accentColor,
               monthTextColor: colors.textPrimary,
-              arrowColor: accentColor,
+              arrowColor: headingColor,
               textDayFontWeight: "400",
               textMonthFontWeight: "500",
               textDayHeaderFontWeight: "500",

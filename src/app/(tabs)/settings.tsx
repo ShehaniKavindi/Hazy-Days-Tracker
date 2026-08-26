@@ -36,7 +36,7 @@ function pad2(n) {
 }
 
 export default function Settings() {
-  const { weekStart, setWeekStart, accent, setAccent, accentColor } = useSettings();
+  const { weekStart, setWeekStart, accent, setAccent, accentColor, headingColor } = useSettings();
   const { entries, clearAll } = useEntries();
 
   const [reminderOn, setReminderOn] = useState(false);
@@ -79,7 +79,7 @@ export default function Settings() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.heading}>
-          <Text style={styles.headingText}>Settings</Text>
+          <Text style={[styles.headingText, { color: headingColor }]}>Settings</Text>
           <Text style={styles.subText}>Tune how Hazy Days works for you</Text>
         </View>
 

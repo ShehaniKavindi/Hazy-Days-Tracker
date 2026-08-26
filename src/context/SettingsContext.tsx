@@ -5,10 +5,35 @@ const SettingsContext = createContext(null);
 const STORAGE_KEY = "hazy-days:settings";
 
 export const ACCENTS = [
-  { key: "sage", label: "Sage", value: "#8FC79D" },
-  { key: "meadow", label: "Meadow", value: "#2F6B3E" },
-  { key: "amber", label: "Amber", value: "#D99A4E" },
-  { key: "rose", label: "Rose", value: "#B5537D" },
+  {
+    key: "sage",
+    label: "Sage",
+    value: "#8FC79D",
+    // Sage keeps the app's original hand-picked shades — not derived.
+    headingColor: "#5d8366",
+    cleanDaysColor: "#2F6B3E",
+  },
+  {
+    key: "meadow",
+    label: "Meadow",
+    value: "#2F6B3E",
+    headingColor: "#1F4A2A",
+    cleanDaysColor: "#A9D9B4",
+  },
+  {
+    key: "amber",
+    label: "Amber",
+    value: "#D99A4E",
+    headingColor: "#96591C",
+    cleanDaysColor: "#F3D9A8",
+  },
+  {
+    key: "rose",
+    label: "Rose",
+    value: "#B5537D",
+    headingColor: "#7A3557",
+    cleanDaysColor: "#F3CDE0",
+  },
 ];
 
 const DEFAULT_SETTINGS = {
@@ -19,6 +44,10 @@ const DEFAULT_SETTINGS = {
 export function getAccentColor(accentKey) {
   const found = ACCENTS.find((a) => a.key === accentKey);
   return found ? found.value : ACCENTS[0].value;
+}
+
+export function getAccentEntry(accentKey) {
+  return ACCENTS.find((a) => a.key === accentKey) ?? ACCENTS[0];
 }
 
 export function SettingsProvider({ children }) {
@@ -64,6 +93,8 @@ export function SettingsProvider({ children }) {
     accent,
     setAccent,
     accentColor: getAccentColor(accent),
+    headingColor: getAccentEntry(accent).headingColor,
+    cleanDaysColor: getAccentEntry(accent).cleanDaysColor,
   };
 
   return (

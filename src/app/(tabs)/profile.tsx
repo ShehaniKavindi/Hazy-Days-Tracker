@@ -64,7 +64,7 @@ export default function Profile() {
   const router = useRouter();
   const { stats, getMonthCounts } = useEntries();
   const { profile } = useProfile();
-  const { accentColor } = useSettings();
+  const { accentColor, headingColor, cleanDaysColor } = useSettings();
 
   const { counts, loggedDays } = getMonthCounts(currentMonthString());
   const cleanRatio = loggedDays > 0 ? counts.clean / loggedDays : 1;
@@ -85,7 +85,7 @@ export default function Profile() {
             style={styles.avatar}
             resizeMode="cover"
           />
-          <Text style={[styles.name, { color: accentColor }]}>{profile.name}</Text>
+          <Text style={[styles.name, { color: headingColor }]}>{profile.name}</Text>
           <Text style={styles.subText}>Tracking since March 2025</Text>
           {profile.goalNote ? (
             <Text style={styles.goalNote}>{profile.goalNote}</Text>
@@ -93,7 +93,7 @@ export default function Profile() {
         </View>
 
         <View style={styles.statsGrid}>
-          <StatCard num={stats.cleanDays} label="clean days" color={accentColor} />
+          <StatCard num={stats.cleanDays} label="clean days" color={cleanDaysColor} />
           <StatCard num={stats.bestStreak} label="best streak" color="#B5537D" />
           <StatCard num={stats.currentStreak} label="current streak" color="#96591C" />
           <StatCard num={stats.daysTracked} label="days tracked" color="#9C4A3D" />
