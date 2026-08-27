@@ -9,6 +9,8 @@ export default function RootLayout() {
       <EntriesProvider>
         <ProfileProvider>
           <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="onboarding" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen
               name="edit-profile"

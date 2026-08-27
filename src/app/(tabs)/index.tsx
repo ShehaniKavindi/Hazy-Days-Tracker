@@ -75,7 +75,7 @@ const dayStyles = StyleSheet.create({
   circle: {
     width: 32,
     height: 32,
-    borderRadius: 32,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
   },

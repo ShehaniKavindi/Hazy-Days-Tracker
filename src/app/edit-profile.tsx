@@ -31,9 +31,11 @@ export default function EditProfile() {
   const [goalNote, setGoalNote] = useState(profile.goalNote);
   const [avatarId, setAvatarId] = useState(profile.avatarId);
 
+  const isNameEmpty = name.trim().length === 0;
+
   function handleSave() {
     updateProfile({
-      name: name.trim() || "Alex",
+      name: name.trim() || "Idiot",
       nickname: nickname.trim(),
       goalNote: goalNote.trim(),
       avatarId,
@@ -72,6 +74,11 @@ export default function EditProfile() {
           placeholder="Your name"
           placeholderTextColor={colors.textMuted}
         />
+        {isNameEmpty && (
+          <Text style={styles.warningText}>
+            If you don't set a name, your profile name will be "Idiot" from now on.
+          </Text>
+        )}
 
         <Text style={styles.label}>Nickname for mood messages</Text>
         <TextInput
@@ -144,6 +151,12 @@ const styles = StyleSheet.create({
   textArea: {
     minHeight: 90,
     textAlignVertical: "top",
+  },
+  warningText: {
+    color: "#C0392B",
+    fontSize: 12,
+    marginTop: 6,
+    alignSelf: "center",
   },
   saveButton: {
     backgroundColor: colors.accent,
