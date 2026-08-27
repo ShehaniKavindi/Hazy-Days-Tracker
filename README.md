@@ -59,8 +59,6 @@ https://github.com/user-attachments/assets/48b29d9f-3ce4-4bc1-8406-4cac34d90089
 |---|---|---|---|
 | ![Proud message](./docs/screenshots/msg%20-%20proud.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) | ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | 
 
-> An Edit Profile screenshot isn't included yet — drop one into `docs/screenshots/` and add a row for it whenever you have it.
-
 See [Demo](#demo) above for a full screen recording of the app in action.
 
 ## Getting started
@@ -140,5 +138,6 @@ Additional docs live in [`docs/`](./docs).
 - ☁️ **Cloud sync** — optional Google sign-in + Firebase/Supabase backend so entries survive an uninstall or sync across devices, staying local-only by default for anyone who doesn't sign in.
 
 ## Author
-Shehani Kavindi
-Software Engineer Undergraduate at Birmingham City University
+
+**Shehani Kavindi**
+**Software Engineer Undergraduate at Birmingham City University**
