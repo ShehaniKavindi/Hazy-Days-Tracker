@@ -8,23 +8,35 @@ Repo: https://github.com/ShehaniKavindi/Hazy-Days-Tracker
 
 ## Demo
 
-https://github.com/user-attachments/assets/PASTE-YOUR-UPLOADED-VIDEO-ID-HERE
+https://github.com/user-attachments/assets/48b29d9f-3ce4-4bc1-8406-4cac34d90089
 
-> **Note:** GitHub only renders video inline if it's uploaded through the web editor's drag-and-drop (see [docs/screenshots/screenrecord.mp4](./docs/screenshots/screenrecord.mp4) for the raw file). Once you drag that file into the README edit box on github.com, GitHub will replace it with a `user-attachments` link — swap the placeholder line above with that link and this section will play inline. Until then, this links to the raw file, which opens/downloads instead of playing in the README.
 
 ## Features
+ 
+**Onboarding**
+- 3-step welcome flow (welcome → name → ready) on first launch
+**Calendar**
+- Tap any day to log it clean, weed, alcohol, or both
+- Color-coded legend, today highlighted separately from logged days
+- Monthly verdict (mostly clean / mixed / heavier) based on your ratio
+- "Both" days count toward the weed *and* alcohol totals, not just their own
+- Reset button in the log modal to clear an accidental or future-dated entry
+**Profile**
+- Clean days, current streak, best streak, and days tracked — computed live
+- Editable name, avatar, nickname, and a personal goal/note
+- Blank name shows a warning and falls back to "Idiot," not a silent failure
+- Mood card whose tone shifts with your clean ratio, addressing you by name/nickname mid-message
+**Reminders**
+- Daily log reminder with a custom time picker, backed by real scheduled notifications
+- Requires a development build on Android — see [Notifications](#notifications)
+**Data**
+- Export all entries to a `.json` backup via the native share sheet
+- Import a backup back in — matching dates are overwritten, the rest is untouched
+- Everything persists on-device via `AsyncStorage`, surviving app restarts
+**Settings & branding**
+- Week start day (Sun/Mon) and a working accent color picker that themes the whole app
+- Custom app icon, adaptive Android icon, and splash screen
 
-- **Onboarding** — a short 3-step welcome flow (welcome → name → ready) on first launch, which sets your profile name before you land on the Calendar.
-- **Calendar logging** — tap any day to mark it clean, weed, alcohol, or both. Color-coded legend, today highlighted separately from logged days, and a monthly "verdict" (mostly clean / mixed / heavier month) based on your ratio for that month. "Both" days correctly count toward both the weed and alcohol totals, not just their own category.
-- **Reset a day** — the log modal has a Reset action for clearing an accidental or future-dated entry back to unlogged, without needing to pick a state first.
-- **Profile stats** — clean days, current streak, best streak, and total days tracked, all computed live from your logged entries.
-- **Edit profile** — customize your display name, pick from a set of preset avatars, set a nickname the mood messages address you by, and add a short personal goal/note. Leaving the name blank shows a warning and falls back to a joke default ("Idiot") rather than silently failing.
-- **This month's mood** — a card that shifts tone (proud → gentle warning → disappointed → dramatic) based on this month's clean ratio, with a "waiting for data" state until at least 3 days are logged. Messages can address you by name/nickname mid-sentence, not just as a prefix.
-- **Real reminders** — a daily log reminder with a custom time picker, backed by actual scheduled local notifications (requires a development build on Android — see [Notifications](#notifications) below).
-- **Data export & import** — export all logged entries to a `.json` backup file via the native share sheet, and import a previously exported file back in (imported dates overwrite matching existing entries; everything else is left untouched).
-- **Settings** — week start day (Sun/Mon), a working accent color picker that themes the whole app (headers, buttons, highlights), reminder controls, and data export/import/clear.
-- **Local persistence** — entries, profile, and settings are all saved on-device with `AsyncStorage`, so everything survives app restarts.
-- **Custom branding** — dedicated app icon, adaptive Android icon, and a splash screen matching the app's own color palette (not the default Expo template).
 
 ## Tech stack
 
