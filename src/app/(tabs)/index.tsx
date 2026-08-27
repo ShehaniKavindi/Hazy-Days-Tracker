@@ -111,6 +111,12 @@ export default function Index() {
     closeModal();
   }
 
+  function handleReset() {
+    if (!selectedDate) return;
+    setEntry(selectedDate, null);
+    closeModal();
+  }
+
   const markedDates = {};
   for (const [dateStr, state] of Object.entries(entries)) {
     const c = state === "clean" ? cleanColors : colors[state];
@@ -133,12 +139,19 @@ export default function Index() {
   let loggedDays = 0;
   for (const [dateStr, state] of Object.entries(entries)) {
     if (dateStr.startsWith(visibleMonth)) {
-      counts[state]++;
       loggedDays++;
+      if (state === "both") {
+        counts.both++;
+        counts.weed++;
+        counts.alcohol++;
+      } else {
+        counts[state]++;
+      }
     }
   }
 
-  const problemDays = counts.weed + counts.alcohol + counts.both;
+  const problemDays = loggedDays - counts.clean;
+
   const ratio = loggedDays === 0 ? 0 : problemDays / loggedDays;
   let verdictTag = "No data yet";
   let verdictColor = colors.textMuted;
@@ -233,10 +246,21 @@ export default function Index() {
       >
         <View style={styles.backdrop}>
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Log this day</Text>
-            {selectedDate && (
-              <Text style={styles.modalDate}>{formatDateLabel(selectedDate)}</Text>
-            )}
+            
+            <View style={styles.modalHeaderRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.modalTitle}>Log this day</Text>
+                {selectedDate && (
+                  <Text style={styles.modalDate}>{formatDateLabel(selectedDate)}</Text>
+                )}
+              </View>
+
+              {selectedDate && entries[selectedDate] && (
+                <TouchableOpacity onPress={handleReset} style={styles.resetButton}>
+                  <Text style={styles.resetButtonText}>Reset</Text>
+                </TouchableOpacity>
+              )}
+            </View>
 
             <View style={styles.optionList}>
               {OPTIONS.map((opt) => {
@@ -395,9 +419,26 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 320,
   },
+  modalHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
   modalTitle: { fontSize: 16, fontWeight: "500", color: colors.textPrimary },
-  modalDate: { fontSize: 12, color: colors.textMuted, marginTop: 2, marginBottom: 16 },
-  optionList: { gap: 8, marginBottom: 18 },
+  modalDate: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
+  resetButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: colors.both.bg,
+  },
+  resetButtonText: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: colors.both.text,
+  },
+optionList: { gap: 8, marginBottom: 18 },
   optionRow: {
     flexDirection: "row",
     alignItems: "center",
