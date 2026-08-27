@@ -1,5 +1,6 @@
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
 import { useState, useRef, useEffect } from "react";
 import {
   Text,
@@ -39,18 +40,35 @@ function pad2(n) {
 }
 
 export default function Settings() {
-  const { weekStart, setWeekStart, accent, setAccent, accentColor, headingColor } = useSettings();
-  const { entries, clearAll } = useEntries();
+  const {
+    weekStart, setWeekStart, accent, setAccent, accentColor, headingColor,
+    reminderOn, setReminderOn, reminderHour, reminderMinute, reminderPeriod, updateReminderTime,
+  } = useSettings();
+  const { entries, setEntry, clearAll } = useEntries();
   const { profile } = useProfile();
 
-  const [reminderOn, setReminderOn] = useState(false);
-  const [reminderHour, setReminderHour] = useState(8);
-  const [reminderMinute, setReminderMinute] = useState(0);
-  const [reminderPeriod, setReminderPeriod] = useState("PM");
   const [timeModalVisible, setTimeModalVisible] = useState(false);
 
+  // Draft time state — the wheel picker edits these freely while open,
+  // and we only commit to the real reminder time (and reschedule the
+  // notification) when the user taps "Done".
+  const [draftHour, setDraftHour] = useState(reminderHour);
+  const [draftMinute, setDraftMinute] = useState(reminderMinute);
+  const [draftPeriod, setDraftPeriod] = useState(reminderPeriod);
+
   const reminderTime = `${reminderHour}:${pad2(reminderMinute)} ${reminderPeriod}`;
-  
+
+  function openTimeModal() {
+    setDraftHour(reminderHour);
+    setDraftMinute(reminderMinute);
+    setDraftPeriod(reminderPeriod);
+    setTimeModalVisible(true);
+  }
+
+  function confirmTimeModal() {
+    updateReminderTime(draftHour, draftMinute, draftPeriod);
+    setTimeModalVisible(false);
+  }
 
   async function handleExport() {
     try {
@@ -82,6 +100,51 @@ export default function Settings() {
     } catch (err) {
       console.warn("Export failed:", err);
       Alert.alert("Something went wrong exporting your data.");
+    }
+  }
+
+  async function handleImport() {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/json",
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      const fileUri = result.assets[0].uri;
+      const file = new File(fileUri);
+      const content = file.text();
+      const parsed = JSON.parse(content);
+
+      // Basic sanity check — is this actually a Hazy Days export?
+      if (!parsed.entries || typeof parsed.entries !== "object") {
+        Alert.alert("Invalid file", "This doesn't look like a Hazy Days backup file.");
+        return;
+      }
+
+      const importedCount = Object.keys(parsed.entries).length;
+
+      Alert.alert(
+        "Import data?",
+        `This file has ${importedCount} logged day${importedCount === 1 ? "" : "s"}. ` +
+          "Any dates that overlap with what you've already logged will be overwritten.",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Import",
+            onPress: () => {
+              for (const [dateStr, state] of Object.entries(parsed.entries)) {
+                setEntry(dateStr, state);
+              }
+              Alert.alert("Imported", `${importedCount} day${importedCount === 1 ? "" : "s"} imported.`);
+            },
+          },
+        ],
+      );
+    } catch (err) {
+      console.warn("Import failed:", err);
+      Alert.alert("Something went wrong importing that file.");
     }
   }
 
@@ -127,7 +190,7 @@ export default function Settings() {
           {reminderOn && (
             <TouchableOpacity
               style={styles.subRow}
-              onPress={() => setTimeModalVisible(true)}
+              onPress={openTimeModal}
             >
               <Text style={styles.subRowLabel}>Reminder time</Text>
               <Text style={styles.subRowValue}>{reminderTime} ›</Text>
@@ -191,9 +254,14 @@ export default function Settings() {
 
         {/* Data */}
         <Section title="Data">
+          <TouchableOpacity style={styles.dataButton} onPress={handleImport}>
+            <Text style={styles.dataButtonText}>Import data</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.dataButton} onPress={handleExport}>
             <Text style={styles.dataButtonText}>Export data</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.dataButton, styles.dataButtonDanger]}
             onPress={handleClearAll}
@@ -219,28 +287,28 @@ export default function Settings() {
             <View style={styles.wheelRow}>
               <WheelColumn
                 items={HOURS}
-                selected={reminderHour}
-                onChange={setReminderHour}
+                selected={draftHour}
+                onChange={setDraftHour}
                 format={(n) => String(n)}
               />
               <Text style={styles.wheelColon}>:</Text>
               <WheelColumn
                 items={MINUTES}
-                selected={reminderMinute}
-                onChange={setReminderMinute}
+                selected={draftMinute}
+                onChange={setDraftMinute}
                 format={pad2}
               />
               <WheelColumn
                 items={PERIODS}
-                selected={reminderPeriod}
-                onChange={setReminderPeriod}
+                selected={draftPeriod}
+                onChange={setDraftPeriod}
                 format={(p) => p}
               />
             </View>
 
             <TouchableOpacity
               style={[styles.confirmButton, { backgroundColor: accentColor }]}
-              onPress={() => setTimeModalVisible(false)}
+              onPress={confirmTimeModal}
             >
               <Text style={styles.confirmButtonText}>Done</Text>
             </TouchableOpacity>
@@ -348,8 +416,6 @@ function SegmentButton({ label, active, onPress }) {
     </TouchableOpacity>
   );
 }
-
-
 
 function todayForFilename() {
   const d = new Date();
