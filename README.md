@@ -13,24 +13,29 @@ https://github.com/user-attachments/assets/48b29d9f-3ce4-4bc1-8406-4cac34d90089
  
 **Onboarding**
 - 3-step welcome flow (welcome → name → ready) on first launch
+  
 **Calendar**
 - Tap any day to log it clean, weed, alcohol, or both
 - Color-coded legend, today highlighted separately from logged days
 - Monthly verdict (mostly clean / mixed / heavier) based on your ratio
 - "Both" days count toward the weed *and* alcohol totals, not just their own
 - Reset button in the log modal to clear an accidental or future-dated entry
+
 **Profile**
 - Clean days, current streak, best streak, and days tracked — computed live
 - Editable name, avatar, nickname, and a personal goal/note
 - Blank name shows a warning and falls back to "Idiot," not a silent failure
 - Mood card whose tone shifts with your clean ratio, addressing you by name/nickname mid-message
+
 **Reminders**
 - Daily log reminder with a custom time picker, backed by real scheduled notifications
 - Requires a development build on Android — see [Notifications](#notifications)
+
 **Data**
 - Export all entries to a `.json` backup via the native share sheet
 - Import a backup back in — matching dates are overwritten, the rest is untouched
 - Everything persists on-device via `AsyncStorage`, surviving app restarts
+
 **Settings & branding**
 - Week start day (Sun/Mon) and a working accent color picker that themes the whole app
 - Custom app icon, adaptive Android icon, and splash screen
