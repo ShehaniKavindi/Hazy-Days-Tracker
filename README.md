@@ -39,17 +39,13 @@ https://github.com/user-attachments/assets/PASTE-YOUR-UPLOADED-VIDEO-ID-HERE
 
 ### Screenshots
 
-| Calendar | Settings | Profile — proud |
-|---|---|---|
-| ![Calendar](./docs/screenshots/calendar.png) | ![Settings](./docs/screenshots/settings.png) | ![Proud message](./docs/screenshots/msg%20-%20proud.png) |
+| Calendar | Settings | Profile — gentle warning | Reminder time picker |
+|---|---|---|---|
+| ![Calendar](./docs/screenshots/calendar.png) | ![Settings](./docs/screenshots/settings.png) | ![Warning message](./docs/screenshots/warning%20msg.png) | ![Timer set](./docs/screenshots/timer%20set.png) |
 
-| Profile — gentle warning | Profile — disappointed | Profile — dramatic |
-|---|---|---|
-| ![Warning message](./docs/screenshots/warning%20msg.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) |
-
-| Profile — no entries yet | Reminder time picker |
-|---|---|
-| ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | ![Timer set](./docs/screenshots/timer%20set.png) |
+| Profile — proud | Profile — disappointed | Profile — dramatic | Profile — no entries yet |
+|---|---|---|---|
+| ![Proud message](./docs/screenshots/msg%20-%20proud.png) | ![Disappointed message](./docs/screenshots/msg%20-%20dissapointed.png) | ![Dramatic message](./docs/screenshots/msg%20-%20dramatic.png) | ![No entries yet](./docs/screenshots/msg%20-%20no%20entries%20yet.png) | 
 
 > An Edit Profile screenshot isn't included yet — drop one into `docs/screenshots/` and add a row for it whenever you have it.
 
