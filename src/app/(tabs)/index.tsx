@@ -53,6 +53,7 @@ function CalendarDay({ date, state, marking, onPress }) {
           dayStyles.circle,
           entryContainerStyle,
           isToday && { borderWidth: 2, borderColor: accent },
+          isDisabled && dayStyles.circleDisabled,
         ]}
       >
         <Text
@@ -71,7 +72,7 @@ function CalendarDay({ date, state, marking, onPress }) {
 }
 
 const dayStyles = StyleSheet.create({
-  cell: { width: 32, alignItems: "center", },
+  cell: { width: 32, alignItems: "center" },
   circle: {
     width: 32,
     height: 32,
@@ -79,6 +80,7 @@ const dayStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  circleDisabled: { opacity: 0.1 },
   number: { fontSize: 13, fontWeight: "400", color: "#243B28" },
   numberDisabled: { color: "#D8DED9" },
 });
