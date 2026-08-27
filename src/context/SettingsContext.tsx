@@ -4,37 +4,60 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const SettingsContext = createContext(null);
 const STORAGE_KEY = "hazy-days:settings";
 
+// The "clean" day mark on the calendar keeps this look for the green
+// themes (sage/meadow already read as "clean"); other themes get a light
+// tint of their own accent instead.
+const DEFAULT_CLEAN_TINT = { bg: "#F1F7EA", text: "#5C6B58" };
+
 export const ACCENTS = [
   {
     key: "sage",
     label: "Sage",
     value: "#8FC79D",
-    // Sage keeps the app's original hand-picked shades — not derived.
+    // Sage keeps the app's original hand-picked shade — not derived.
     headingColor: "#5d8366",
-    cleanDaysColor: "#2F6B3E",
+    cleanTint: DEFAULT_CLEAN_TINT,
   },
   {
     key: "meadow",
     label: "Meadow",
     value: "#2F6B3E",
-    headingColor: "#1F4A2A",
-    cleanDaysColor: "#A9D9B4",
+    headingColor: "#2C5C3A",
+    cleanTint: DEFAULT_CLEAN_TINT,
   },
   {
     key: "amber",
     label: "Amber",
     value: "#D99A4E",
-    headingColor: "#96591C",
-    cleanDaysColor: "#F3D9A8",
+    headingColor: "#AD6B22",
+    cleanTint: { bg: "#fef9f1", text: "#AD6B22" },
   },
   {
     key: "rose",
     label: "Rose",
     value: "#B5537D",
-    headingColor: "#7A3557",
-    cleanDaysColor: "#F3CDE0",
+    headingColor: "#8C4468",
+    cleanTint: { bg: "#fdf3f8", text: "#8C4468" },
+  },
+  {
+    key: "lavender",
+    label: "Lavender",
+    value: "#B39DDB",
+    headingColor: "#5E4B8B",
+    cleanTint: { bg: "#f6f3fc", text: "#5E4B8B" },
+  },
+  {
+    key: "skyblue",
+    label: "Cyan",
+    value: "#8EC5E8",
+    headingColor: "#3B6E90",
+    cleanTint: { bg: "#f3faff", text: "#3B6E90" },
   },
 ];
+
+// The "clean days" number on the Profile screen always stays this color,
+// regardless of which accent theme is active.
+export const CLEAN_DAYS_COLOR = "#2F6B3E";
 
 const DEFAULT_SETTINGS = {
   weekStart: "sunday", // "sunday" | "monday"
@@ -94,7 +117,8 @@ export function SettingsProvider({ children }) {
     setAccent,
     accentColor: getAccentColor(accent),
     headingColor: getAccentEntry(accent).headingColor,
-    cleanDaysColor: getAccentEntry(accent).cleanDaysColor,
+    cleanDaysColor: CLEAN_DAYS_COLOR,
+    cleanColors: getAccentEntry(accent).cleanTint,
   };
 
   return (

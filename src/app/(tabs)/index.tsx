@@ -10,11 +10,9 @@ const colors = {
   card: "#FFFFFF",
   textPrimary: "#243B28",
   textMuted: "#7C8878",
-  clean: { bg: "#F1F7EA", text: "#5C6B58" },
   weed: { bg: "#CDEBCF", text: "#2F6B3E" },
   alcohol: { bg: "#FBDFB8", text: "#96591C" },
   both: { bg: "#F3CDC6", text: "#9C4A3D" },
-  today: { bg: "#FBE4EC", text: "#B5537D" },
 };
 
 const OPTIONS = [
@@ -36,9 +34,58 @@ function formatDateLabel(dateStr) {
   return date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
 }
 
+function CalendarDay({ date, state, marking, onPress }) {
+  if (!date) return null;
+  const isDisabled = state === "disabled" || state === "inactive";
+  const isToday = marking?.isToday;
+  const accent = marking?.accentColor;
+  const entryContainerStyle = marking?.customStyles?.container;
+  const entryTextStyle = marking?.customStyles?.text;
+
+  return (
+    <TouchableOpacity
+      onPress={() => onPress?.(date)}
+      activeOpacity={0.7}
+      style={dayStyles.cell}
+    >
+      <View
+        style={[
+          dayStyles.circle,
+          entryContainerStyle,
+          isToday && { borderWidth: 2, borderColor: accent },
+        ]}
+      >
+        <Text
+          style={[
+            dayStyles.number,
+            isDisabled && dayStyles.numberDisabled,
+            isToday && !entryTextStyle && { color: accent },
+            entryTextStyle,
+          ]}
+        >
+          {date.day}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+const dayStyles = StyleSheet.create({
+  cell: { width: 32, alignItems: "center", paddingTop: 2 },
+  circle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  number: { fontSize: 13, fontWeight: "400", color: "#243B28" },
+  numberDisabled: { color: "#D8DED9" },
+});
+
 export default function Index() {
   const router = useRouter();
-  const { firstDay, accentColor, headingColor } = useSettings();
+  const { firstDay, accentColor, headingColor, cleanColors } = useSettings();
   const { entries, setEntry } = useEntries();
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
@@ -66,23 +113,21 @@ export default function Index() {
 
   const markedDates = {};
   for (const [dateStr, state] of Object.entries(entries)) {
+    const c = state === "clean" ? cleanColors : colors[state];
     markedDates[dateStr] = {
       customStyles: {
-        container: { backgroundColor: colors[state].bg, borderRadius: 9 },
-        text: { color: colors[state].text, fontWeight: "500" },
+        container: { backgroundColor: c.bg, borderRadius: 9 },
+        text: { color: c.text, fontWeight: "500" },
       },
     };
   }
 
   const today = todayString();
-  if (!markedDates[today]) {
-    markedDates[today] = {
-      customStyles: {
-        container: { backgroundColor: colors.today.text, borderRadius: 40 },
-        text: { color: colors.today.bg, fontWeight: "600" },
-      },
-    };
-  }
+  markedDates[today] = {
+    ...(markedDates[today] || {}),
+    isToday: true,
+    accentColor,
+  };
 
   const counts = { clean: 0, weed: 0, alcohol: 0, both: 0 };
   let loggedDays = 0;
@@ -101,7 +146,7 @@ export default function Index() {
   if (loggedDays > 0) {
     if (ratio <= 0.2) {
       verdictTag = "Mostly clean";
-      verdictColor = colors.clean.text;
+      verdictColor = cleanColors.text;
     } else if (ratio <= 0.7) {
       verdictTag = "Mixed month";
       verdictColor = colors.alcohol.text;
@@ -129,6 +174,7 @@ export default function Index() {
             firstDay={firstDay}
             markingType="custom"
             markedDates={markedDates}
+            dayComponent={CalendarDay}
             onDayPress={(day) => openModalFor(day.dateString)}
             onMonthChange={(month) => setVisibleMonth(month.dateString.slice(0, 7))}
             theme={{
@@ -150,7 +196,7 @@ export default function Index() {
           />
 
           <View style={styles.legend}>
-            <LegendItem color={colors.clean.bg} label="clean" outline />
+            <LegendItem color={cleanColors.bg} label="clean" outline />
             <LegendItem color={colors.weed.bg} label="weed" />
             <LegendItem color={colors.alcohol.bg} label="alcohol" />
             <LegendItem color={colors.both.bg} label="both" />
@@ -158,7 +204,7 @@ export default function Index() {
         </View>
 
         <View style={styles.statsGrid}>
-          <StatCard num={counts.clean} label="clean days" color={colors.clean.text} />
+          <StatCard num={counts.clean} label="clean days" color={cleanColors.text} />
           <StatCard num={counts.weed} label="weed days" color={colors.weed.text} />
           <StatCard num={counts.alcohol} label="alcohol days" color={colors.alcohol.text} />
           <StatCard num={counts.both} label="both" color={colors.both.text} />
@@ -195,14 +241,15 @@ export default function Index() {
             <View style={styles.optionList}>
               {OPTIONS.map((opt) => {
                 const selected = draftState === opt.key;
+                const optColor = opt.key === "clean" ? cleanColors : colors[opt.key];
                 return (
                   <TouchableOpacity
                     key={opt.key}
                     style={[
                       styles.optionRow,
                       selected && {
-                        backgroundColor: colors[opt.key].bg,
-                        borderColor: colors[opt.key].text,
+                        backgroundColor: optColor.bg,
+                        borderColor: optColor.text,
                       },
                     ]}
                     onPress={() => setDraftState(opt.key)}
@@ -211,7 +258,7 @@ export default function Index() {
                       style={[
                         styles.checkbox,
                         selected
-                          ? { backgroundColor: colors[opt.key].text }
+                          ? { backgroundColor: optColor.text }
                           : styles.checkboxEmpty,
                       ]}
                     >

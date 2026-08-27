@@ -390,8 +390,8 @@ const styles = StyleSheet.create({
   segmentText: { fontSize: 13, color: colors.textMuted, fontWeight: "500" },
   segmentTextActive: { color: colors.textPrimary },
 
-  swatchRow: { flexDirection: "row", gap: 16, marginTop: 12 },
-  swatchWrap: { alignItems: "center", gap: 4 },
+  swatchRow: { flexDirection: "row", flexWrap: "wrap", rowGap: 14, columnGap: 16, marginTop: 12 },
+  swatchWrap: { alignItems: "center", gap: 4, width: 40 },
   swatch: {
     width: 32,
     height: 32,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   },
   swatchSelected: { borderWidth: 2, borderColor: colors.textPrimary },
   swatchCheck: { color: "#FFFFFF", fontSize: 13, fontWeight: "bold" },
-  swatchLabel: { fontSize: 11, color: colors.textMuted },
+  swatchLabel: { fontSize: 10, color: colors.textMuted, textAlign: "center" },
 
   dataButton: {
     paddingVertical: 14,
