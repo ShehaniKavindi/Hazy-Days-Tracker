@@ -1,3 +1,5 @@
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import { useState, useRef, useEffect } from "react";
 import {
   Text,
@@ -12,6 +14,7 @@ import {
 } from "react-native";
 import { useSettings, ACCENTS } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
+import { useProfile } from "@/context/ProfileContext";
 
 const colors = {
   page: "#F7F8F4",
@@ -38,6 +41,7 @@ function pad2(n) {
 export default function Settings() {
   const { weekStart, setWeekStart, accent, setAccent, accentColor, headingColor } = useSettings();
   const { entries, clearAll } = useEntries();
+  const { profile } = useProfile();
 
   const [reminderOn, setReminderOn] = useState(false);
   const [reminderHour, setReminderHour] = useState(8);
@@ -46,15 +50,39 @@ export default function Settings() {
   const [timeModalVisible, setTimeModalVisible] = useState(false);
 
   const reminderTime = `${reminderHour}:${pad2(reminderMinute)} ${reminderPeriod}`;
+  
 
-  function handleExport() {
-    const count = Object.keys(entries).length;
-    Alert.alert(
-      "Export data",
-      count === 0
-        ? "Nothing to export yet — log a day first."
-        : `You have ${count} logged day${count === 1 ? "" : "s"}. File export isn't wired up yet, but your data is safely tracked in the app.`,
-    );
+  async function handleExport() {
+    try {
+      if (Object.keys(entries).length === 0) {
+        Alert.alert("Nothing to export yet", "Log a day first, then try exporting.");
+        return;
+      }
+
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        profileName: profile.name,
+        entries,
+      };
+
+      const fileName = `hazy-days-backup-${todayForFilename()}.json`;
+      const file = new File(Paths.document, fileName);
+      file.write(JSON.stringify(payload, null, 2));
+
+      const canShare = await Sharing.isAvailableAsync();
+      if (!canShare) {
+        Alert.alert("Sharing isn't available on this device.");
+        return;
+      }
+
+      await Sharing.shareAsync(file.uri, {
+        mimeType: "application/json",
+        dialogTitle: "Export Hazy Days data",
+      });
+    } catch (err) {
+      console.warn("Export failed:", err);
+      Alert.alert("Something went wrong exporting your data.");
+    }
   }
 
   function handleClearAll() {
@@ -319,6 +347,14 @@ function SegmentButton({ label, active, onPress }) {
       </Text>
     </TouchableOpacity>
   );
+}
+
+
+
+function todayForFilename() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
 const styles = StyleSheet.create({
