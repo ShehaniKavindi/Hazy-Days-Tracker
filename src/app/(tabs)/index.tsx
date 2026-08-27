@@ -71,11 +71,11 @@ function CalendarDay({ date, state, marking, onPress }) {
 }
 
 const dayStyles = StyleSheet.create({
-  cell: { width: 32, alignItems: "center", paddingTop: 2 },
+  cell: { width: 32, alignItems: "center", },
   circle: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 32,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingBottom: 12,
   },
-  headingText: { fontSize: 25, fontWeight: 500, color: "#5d8366" },
+  headingText: { fontSize: 25, fontWeight: "500", color: "#5d8366" },
   subText: { fontSize: 14, color: "#7d7f7c" },
   card: {
     backgroundColor: colors.card,
