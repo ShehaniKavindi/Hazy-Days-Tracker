@@ -4,8 +4,6 @@ A lighthearted habit tracker for logging clean, weed, alcohol, or "both" days on
 
 Built with [Expo](https://expo.dev) (SDK 55) and [Expo Router](https://docs.expo.dev/router/introduction).
 
-Repo: https://github.com/ShehaniKavindi/Hazy-Days-Tracker
-
 ## Demo
 
 https://github.com/user-attachments/assets/48b29d9f-3ce4-4bc1-8406-4cac34d90089
