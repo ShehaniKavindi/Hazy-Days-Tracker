@@ -101,7 +101,7 @@ export const ACCENTS = [
   },
   {
     key: "lavender",
-    label: "Lavender",
+    label: "Lilac",
     value: "#B39DDB",
     headingColor: "#5E4B8B",
     cleanTint: { bg: "#f6f3fc", text: "#5E4B8B" },
