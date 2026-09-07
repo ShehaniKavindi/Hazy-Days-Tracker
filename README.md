@@ -80,8 +80,6 @@ See [Demo](#demo) above for a full screen recording of the app in action.
 
    From the output you can open the app in a [development build](https://docs.expo.dev/develop/development-builds/introduction/), an Android emulator, an iOS simulator, or [Expo Go](https://expo.dev/go).
 
-> **Note:** This project tracks Expo SDK 55, which changed significantly from earlier SDKs. If you're extending this app, check the [versioned docs](https://docs.expo.dev/versions/v55.0.0/) before assuming an older API still applies — this includes `expo-file-system`, which moved to a new `File`/`Directory` class-based API in this SDK; the legacy string-path functions (`writeAsStringAsync`, etc.) are deprecated.
-
 ## Notifications
 
 Local scheduled reminders use `expo-notifications`. Two important platform notes:
