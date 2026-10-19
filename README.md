@@ -49,6 +49,19 @@ https://github.com/user-attachments/assets/48b29d9f-3ce4-4bc1-8406-4cac34d90089
 - Dark mode — a manual switch in Settings (light is the default), using a soft neutral dark palette that works with every accent color
 - Custom app icon, adaptive Android icon, and splash screen
 
+## Try it
+
+| Platform | How to use it |
+|---|---|
+| 🤖 **Android** | [Download the APK](https://expo.dev/accounts/shehanikavindi/projects/Hazy-Days-Tracker/builds/3fbf1793-778b-4dfb-9044-dddfde114033). Open the link on your phone, download the file, and install it. If Android asks, allow **Install unknown apps**. |
+| 🍎 **iPhone** | [Open the web app](https://hazy-days-tracker.vercel.app) in **Safari**, tap **Share → Add to Home Screen**, and it opens full screen like an app. |
+
+> **Notes**
+> - The iPhone version is a web app, so daily reminder notifications aren't supported there.
+> - Data is stored on each device separately (Android app and web app don't sync). Use **Settings → Export data** to back up, and **Import data** to restore.
+> - Clearing browser data on iPhone (or app data on Android) erases your logs, so export a backup now and then.
+
+
 ## Tech stack
 
 - [Expo](https://expo.dev) + [Expo Router](https://docs.expo.dev/router/introduction) (file-based routing)
