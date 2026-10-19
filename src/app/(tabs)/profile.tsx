@@ -1,15 +1,8 @@
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { useSettings } from "@/context/SettingsContext";
+import { useSettings, useStyles } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
 import { useProfile, getAvatarImage } from "@/context/ProfileContext";
-
-const colors = {
-  page: "#F7F8F4",
-  card: "#FFFFFF",
-  textPrimary: "#243B28",
-  textMuted: "#7C8878",
-};
 
 function currentMonthString() {
   const d = new Date();
@@ -72,7 +65,8 @@ export default function Profile() {
   }
 
   const { profile } = useProfile();
-  const { accentColor, headingColor, cleanDaysColor } = useSettings();
+  const { accentColor, headingColor, cleanDaysColor, colors } = useSettings();
+  const styles = useStyles(makeStyles);
 
   const { counts, loggedDays } = getMonthCounts(currentMonthString());
   const cleanRatio = loggedDays > 0 ? counts.clean / loggedDays : 1;
@@ -104,9 +98,9 @@ export default function Profile() {
 
         <View style={styles.statsGrid}>
           <StatCard num={stats.cleanDays} label="clean days" color={cleanDaysColor} />
-          <StatCard num={stats.bestStreak} label="best streak" color="#B5537D" />
-          <StatCard num={stats.currentStreak} label="current streak" color="#96591C" />
-          <StatCard num={stats.daysTracked} label="days tracked" color="#9C4A3D" />
+          <StatCard num={stats.bestStreak} label="best streak" color={colors.bestStreak} />
+          <StatCard num={stats.currentStreak} label="current streak" color={colors.currentStreak} />
+          <StatCard num={stats.daysTracked} label="days tracked" color={colors.daysTracked} />
         </View>
 
         <View style={styles.section}>
@@ -139,6 +133,7 @@ export default function Profile() {
 }
 
 function StatCard({ num, label, color }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.statCard}>
       <Text style={[styles.statNum, { color }]}>{num}</Text>
@@ -147,7 +142,7 @@ function StatCard({ num, label, color }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   scrollContent: { paddingBottom: 24 },
 

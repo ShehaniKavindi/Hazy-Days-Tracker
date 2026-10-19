@@ -2,18 +2,8 @@ import { useState } from "react";
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Stack } from "expo-router";
 import { Calendar } from "react-native-calendars";
-import { useSettings } from "@/context/SettingsContext";
+import { useSettings, useStyles } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
-
-const colors = {
-  page: "#F7F8F4",
-  card: "#FFFFFF",
-  textPrimary: "#243B28",
-  textMuted: "#7C8878",
-  weed: { bg: "#CDEBCF", text: "#2F6B3E" },
-  alcohol: { bg: "#FBDFB8", text: "#96591C" },
-  both: { bg: "#F3CDC6", text: "#9C4A3D" },
-};
 
 const PRESETS = [
   { key: "month", label: "This month" },
@@ -68,7 +58,8 @@ function presetRange(key, entries) {
 }
 
 export default function Summary() {
-  const { firstDay, accentColor, headingColor, cleanDaysColor, cleanColors } = useSettings();
+  const { firstDay, accentColor, headingColor, cleanDaysColor, cleanColors, colors, darkMode } = useSettings();
+  const styles = useStyles(makeStyles);
   const { entries, getRangeCounts } = useEntries();
 
   const initial = presetRange("month", entries);
@@ -159,7 +150,7 @@ export default function Summary() {
 
         <View style={styles.card}>
           <Calendar
-            key={calKey}
+            key={`${calKey}-${darkMode ? "dark" : "light"}`}
             current={calMonth}
             firstDay={firstDay}
             markingType="period"
@@ -170,7 +161,7 @@ export default function Summary() {
               calendarBackground: colors.card,
               textSectionTitleColor: colors.textMuted,
               dayTextColor: colors.textPrimary,
-              textDisabledColor: "#D8DED9",
+              textDisabledColor: colors.disabled,
               todayTextColor: headingColor,
               monthTextColor: colors.textPrimary,
               arrowColor: headingColor,
@@ -203,7 +194,7 @@ export default function Summary() {
         <View style={styles.barCard}>
           <View style={styles.bar}>
             {loggedDays === 0 ? (
-              <View style={{ flex: 1, backgroundColor: "#E6EAE3" }} />
+              <View style={{ flex: 1, backgroundColor: colors.border }} />
             ) : (
               segments.map((s) => s.n > 0 && <View key={s.key} style={{ flex: s.n, backgroundColor: s.color }} />)
             )}
@@ -228,6 +219,7 @@ export default function Summary() {
 }
 
 function StatCard({ num, label, color, bg }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={[styles.statCard, { backgroundColor: bg }]}>
       <Text style={[styles.statNum, { color }]}>{num}</Text>
@@ -236,7 +228,7 @@ function StatCard({ num, label, color, bg }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   scrollContent: { paddingBottom: 28 },
 
@@ -249,7 +241,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  chipText: { fontSize: 13, fontWeight: "500", color: "#4F6B55" },
+  chipText: { fontSize: 13, fontWeight: "500", color: colors.textPrimary },
 
   card: {
     backgroundColor: colors.card,
@@ -277,7 +269,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 10,
     marginHorizontal: 16,
-    marginTop: 16,
+    marginTop: 12,
   },
   statCard: { borderRadius: 16, paddingVertical: 12, paddingHorizontal: 14, width: "47.5%" },
   statNum: { fontSize: 26, fontWeight: "600" },

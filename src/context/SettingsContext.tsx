@@ -1,7 +1,9 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants, { ExecutionEnvironment } from "expo-constants";
+
+import { LIGHT, DARK } from "@/palette";
 
 const SettingsContext = createContext(null);
 const STORAGE_KEY = "hazy-days:settings";
@@ -115,6 +117,16 @@ export const ACCENTS = [
   },
 ];
 
+// Dark-mode variants of the per-accent heading color and clean-day tint.
+const DARK_ACCENT_EXTRAS = {
+  sage: { headingColor: "#9FD2AB", cleanTint: { bg: "#243528", text: "#A9D6B3" } },
+  meadow: { headingColor: "#7FC08F", cleanTint: { bg: "#243528", text: "#A9D6B3" } },
+  amber: { headingColor: "#E8B877", cleanTint: { bg: "#3A2E1C", text: "#E8B877" } },
+  rose: { headingColor: "#E39BB9", cleanTint: { bg: "#3B2530", text: "#E39BB9" } },
+  lavender: { headingColor: "#C9B8EE", cleanTint: { bg: "#2D2839", text: "#C9B8EE" } },
+  skyblue: { headingColor: "#9CCDEA", cleanTint: { bg: "#1F3340", text: "#9CCDEA" } },
+};
+
 // The "clean days" number on the Profile screen always stays this color,
 // regardless of which accent theme is active.
 export const CLEAN_DAYS_COLOR = "#2F6B3E";
@@ -136,6 +148,7 @@ export function getAccentEntry(accentKey) {
 export function SettingsProvider({ children }) {
   const [weekStart, setWeekStart] = useState(DEFAULT_SETTINGS.weekStart);
   const [accent, setAccent] = useState(DEFAULT_SETTINGS.accent);
+  const [darkMode, setDarkMode] = useState(false); // light is the default
 
   // Reminder state lives here too, so it persists the same way weekStart/accent do.
   const [reminderOn, setReminderOnState] = useState(false);
@@ -154,6 +167,7 @@ export function SettingsProvider({ children }) {
           const saved = JSON.parse(raw);
           if (saved.weekStart) setWeekStart(saved.weekStart);
           if (saved.accent) setAccent(saved.accent);
+          if (typeof saved.darkMode === "boolean") setDarkMode(saved.darkMode);
           if (typeof saved.reminderOn === "boolean") setReminderOnState(saved.reminderOn);
           if (saved.reminderHour) setReminderHour(saved.reminderHour);
           if (typeof saved.reminderMinute === "number") setReminderMinute(saved.reminderMinute);
@@ -173,11 +187,11 @@ export function SettingsProvider({ children }) {
     if (!hasHydrated.current) return;
     AsyncStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ weekStart, accent, reminderOn, reminderHour, reminderMinute, reminderPeriod }),
+      JSON.stringify({ weekStart, accent, darkMode, reminderOn, reminderHour, reminderMinute, reminderPeriod }),
     ).catch((err) => {
       console.warn("Failed to save settings:", err);
     });
-  }, [weekStart, accent, reminderOn, reminderHour, reminderMinute, reminderPeriod]);
+  }, [weekStart, accent, darkMode, reminderOn, reminderHour, reminderMinute, reminderPeriod]);
 
   // Turning the reminder on asks for permission and schedules the daily
   // notification; turning it off cancels whatever's scheduled.
@@ -205,7 +219,14 @@ export function SettingsProvider({ children }) {
     }
   }
 
+  const colors = darkMode ? DARK : LIGHT;
+  const accentEntry = getAccentEntry(accent);
+  const darkExtras = DARK_ACCENT_EXTRAS[accent] ?? DARK_ACCENT_EXTRAS.sage;
+
   const value = {
+    darkMode,
+    setDarkMode,
+    colors,
     weekStart,
     setWeekStart,
     // react-native-calendars expects 0 = Sunday, 1 = Monday
@@ -213,9 +234,9 @@ export function SettingsProvider({ children }) {
     accent,
     setAccent,
     accentColor: getAccentColor(accent),
-    headingColor: getAccentEntry(accent).headingColor,
-    cleanDaysColor: CLEAN_DAYS_COLOR,
-    cleanColors: getAccentEntry(accent).cleanTint,
+    headingColor: darkMode ? darkExtras.headingColor : accentEntry.headingColor,
+    cleanDaysColor: colors.cleanDays,
+    cleanColors: darkMode ? darkExtras.cleanTint : accentEntry.cleanTint,
     reminderOn,
     setReminderOn,
     reminderHour,
@@ -237,4 +258,10 @@ export function useSettings() {
     throw new Error("useSettings must be used within a SettingsProvider");
   }
   return ctx;
+}
+
+// Builds a screen's StyleSheet from the active palette (re-built on theme change).
+export function useStyles(makeStyles) {
+  const { colors } = useSettings();
+  return useMemo(() => makeStyles(colors), [colors, makeStyles]);
 }

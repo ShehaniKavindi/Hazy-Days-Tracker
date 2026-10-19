@@ -13,19 +13,9 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { useSettings, ACCENTS } from "@/context/SettingsContext";
+import { useSettings, useStyles, ACCENTS } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
 import { useProfile } from "@/context/ProfileContext";
-
-const colors = {
-  page: "#F7F8F4",
-  card: "#FFFFFF",
-  textPrimary: "#243B28",
-  textMuted: "#7C8878",
-  border: "#E4E7DF",
-  accentDefault: "#8FC79D",
-  danger: "#9C4A3D",
-};
 
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 1); // 1-12
 const MINUTES = Array.from({ length: 60 }, (_, i) => i); // 0-59
@@ -43,7 +33,9 @@ export default function Settings() {
   const {
     weekStart, setWeekStart, accent, setAccent, accentColor, headingColor,
     reminderOn, setReminderOn, reminderHour, reminderMinute, reminderPeriod, updateReminderTime,
+    colors, darkMode, setDarkMode,
   } = useSettings();
+  const styles = useStyles(makeStyles);
   const { entries, setEntry, clearAll } = useEntries();
   const { profile } = useProfile();
 
@@ -183,7 +175,7 @@ export default function Settings() {
             <Switch
               value={reminderOn}
               onValueChange={setReminderOn}
-              trackColor={{ false: "#D8DED9", true: accentColor }}
+              trackColor={{ false: colors.switchTrackOff, true: accentColor }}
               thumbColor="#FFFFFF"
             />
           </Row>
@@ -245,10 +237,14 @@ export default function Settings() {
 
           <Row
             label="Dark mode"
-            description="Coming soon"
-            muted
+            description="Easier on the eyes at night"
           >
-            <Switch value={false} disabled trackColor={{ false: "#D8DED9", true: "#D8DED9" }} />
+            <Switch
+              value={darkMode}
+              onValueChange={setDarkMode}
+              trackColor={{ false: colors.switchTrackOff, true: accentColor }}
+              thumbColor="#FFFFFF"
+            />
           </Row>
         </Section>
 
@@ -320,6 +316,7 @@ export default function Settings() {
 }
 
 function WheelColumn({ items, selected, onChange, format }) {
+  const styles = useStyles(makeStyles);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -384,6 +381,7 @@ function WheelColumn({ items, selected, onChange, format }) {
 }
 
 function Section({ title, children }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -393,6 +391,7 @@ function Section({ title, children }) {
 }
 
 function Row({ label, description, children, muted }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.row}>
       <View style={styles.rowText}>
@@ -405,6 +404,7 @@ function Row({ label, description, children, muted }) {
 }
 
 function SegmentButton({ label, active, onPress }) {
+  const styles = useStyles(makeStyles);
   return (
     <TouchableOpacity
       style={[styles.segmentButton, active && styles.segmentButtonActive]}
@@ -423,7 +423,7 @@ function todayForFilename() {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   scrollContent: { paddingBottom: 24 },
   heading: {
@@ -431,8 +431,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingBottom: 12,
   },
-  headingText: { fontSize: 25, fontWeight: "500", color: "#5d8366" },
-  subText: { fontSize: 14, color: "#7d7f7c" },
+  headingText: { fontSize: 25, fontWeight: "500", color: colors.heading },
+  subText: { fontSize: 14, color: colors.subText },
 
   section: { marginTop: 10, marginHorizontal: 16 },
   sectionTitle: {
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingLeft: 14,
     borderTopWidth: 1,
-    borderTopColor: "#F0F2EC",
+    borderTopColor: colors.divider,
   },
   subRowLabel: { fontSize: 13, color: colors.textMuted },
   subRowValue: { fontSize: 13, fontWeight: "500", color: colors.textPrimary },
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   rowStack: { paddingVertical: 12 },
   segmented: {
     flexDirection: "row",
-    backgroundColor: "#F1F3EE",
+    backgroundColor: colors.segmentBg,
     borderRadius: 10,
     padding: 3,
     marginTop: 10,
@@ -512,20 +512,20 @@ const styles = StyleSheet.create({
   dataButtonText: { fontSize: 14, fontWeight: "500", color: colors.textPrimary },
   dataButtonDanger: {
     borderTopWidth: 1,
-    borderTopColor: "#F0F2EC",
+    borderTopColor: colors.divider,
   },
   dataButtonDangerText: { color: colors.danger },
 
   // Modal styles (matches calendar screen)
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(36,59,40,0.35)",
+    backgroundColor: colors.backdrop,
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
   },
   modalCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.card,
     borderRadius: 18,
     padding: 20,
     width: "100%",
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: ITEM_HEIGHT,
     borderRadius: 10,
-    backgroundColor: "#F1F7EA",
+    backgroundColor: colors.wheelHighlight,
   },
   wheelItem: {
     height: ITEM_HEIGHT,
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
   confirmButton: {
     padding: 12,
     borderRadius: 12,
-    backgroundColor: colors.accentDefault,
+    backgroundColor: "#8FC79D",
     alignItems: "center",
   },
   confirmButtonText: { fontSize: 14, fontWeight: "500", color: "#FFFFFF" },

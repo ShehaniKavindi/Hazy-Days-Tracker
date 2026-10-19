@@ -11,20 +11,13 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useProfile, AVATAR_OPTIONS } from "@/context/ProfileContext";
-import { useSettings } from "@/context/SettingsContext";
-
-const colors = {
-  page: "#F7F8F4",
-  card: "#FFFFFF",
-  textPrimary: "#243B28",
-  textMuted: "#7C8878",
-  accent: "#8FC79D",
-};
+import { useSettings, useStyles } from "@/context/SettingsContext";
 
 export default function EditProfile() {
   const router = useRouter();
   const { profile, updateProfile } = useProfile();
-  const { accentColor } = useSettings();
+  const { accentColor, colors } = useSettings();
+  const styles = useStyles(makeStyles);
 
   const [name, setName] = useState(profile.name);
   const [nickname, setNickname] = useState(profile.nickname);
@@ -112,7 +105,7 @@ export default function EditProfile() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   scrollContent: { padding: 16, paddingBottom: 40 },
   label: {
@@ -153,13 +146,13 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   warningText: {
-    color: "#C0392B",
+    color: colors.warning,
     fontSize: 12,
     marginTop: 6,
     alignSelf: "center",
   },
   saveButton: {
-    backgroundColor: colors.accent,
+    backgroundColor: "#8FC79D",
     borderRadius: 12,
     padding: 14,
     alignItems: "center",

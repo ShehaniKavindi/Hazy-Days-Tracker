@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSettings } from "@/context/SettingsContext";
 
 export default function TabsLayout() {
-  const { accentColor } = useSettings();
+  const { accentColor, colors } = useSettings();
 
   return (
     <Tabs
@@ -11,8 +11,9 @@ export default function TabsLayout() {
         headerStyle: { backgroundColor: accentColor },
         headerTintColor: "#FFFFFF",
         tabBarActiveTintColor: accentColor,
-        tabBarInactiveTintColor: "#A2AC9C",
-        tabBarStyle: { backgroundColor: "#FFFFFF" },
+        tabBarInactiveTintColor: colors.tabInactive,
+        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
+        sceneStyle: { backgroundColor: colors.page },
       }}
     >
       

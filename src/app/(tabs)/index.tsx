@@ -2,18 +2,8 @@ import { useState } from "react";
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, Modal, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { Calendar } from "react-native-calendars";
-import { useSettings } from "@/context/SettingsContext";
+import { useSettings, useStyles } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
-
-const colors = {
-  page: "#F7F8F4",
-  card: "#FFFFFF",
-  textPrimary: "#243B28",
-  textMuted: "#7C8878",
-  weed: { bg: "#CDEBCF", text: "#2F6B3E" },
-  alcohol: { bg: "#FBDFB8", text: "#96591C" },
-  both: { bg: "#F3CDC6", text: "#9C4A3D" },
-};
 
 const OPTIONS = [
   { key: "clean", label: "Clean" },
@@ -35,6 +25,7 @@ function formatDateLabel(dateStr) {
 }
 
 function CalendarDay({ date, state, marking, onPress }) {
+  const dayStyles = useStyles(makeDayStyles);
   if (!date) return null;
   const isDisabled = state === "disabled" || state === "inactive";
   const isToday = marking?.isToday;
@@ -71,7 +62,7 @@ function CalendarDay({ date, state, marking, onPress }) {
   );
 }
 
-const dayStyles = StyleSheet.create({
+const makeDayStyles = (colors) => StyleSheet.create({
   cell: { width: 32, alignItems: "center" },
   circle: {
     width: 32,
@@ -81,13 +72,14 @@ const dayStyles = StyleSheet.create({
     justifyContent: "center",
   },
   circleDisabled: { opacity: 0.1 },
-  number: { fontSize: 13, fontWeight: "400", color: "#243B28" },
-  numberDisabled: { color: "#D8DED9" },
+  number: { fontSize: 13, fontWeight: "400", color: colors.textPrimary },
+  numberDisabled: { color: colors.disabled },
 });
 
 export default function Index() {
   const router = useRouter();
-  const { firstDay, accentColor, headingColor, cleanColors } = useSettings();
+  const { firstDay, accentColor, headingColor, cleanColors, colors, darkMode } = useSettings();
+  const styles = useStyles(makeStyles);
   const { entries, setEntry } = useEntries();
   const [visibleMonth, setVisibleMonth] = useState(todayString().slice(0, 7));
 
@@ -185,6 +177,7 @@ export default function Index() {
 
         <View style={styles.card}>
           <Calendar
+            key={darkMode ? "dark" : "light"}
             current={todayString()}
             firstDay={firstDay}
             markingType="custom"
@@ -196,7 +189,7 @@ export default function Index() {
               calendarBackground: colors.card,
               textSectionTitleColor: colors.textMuted,
               dayTextColor: colors.textPrimary,
-              textDisabledColor: "#D8DED9",
+              textDisabledColor: colors.disabled,
               todayTextColor: accentColor,
               monthTextColor: colors.textPrimary,
               arrowColor: headingColor,
@@ -312,6 +305,7 @@ export default function Index() {
 }
 
 function LegendItem({ color, label, outline }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.legendItem}>
       <View
@@ -327,6 +321,7 @@ function LegendItem({ color, label, outline }) {
 }
 
 function StatCard({ num, label, color }) {
+  const styles = useStyles(makeStyles);
   return (
     <View style={styles.statCard}>
       <Text style={[styles.statNum, { color }]}>{num}</Text>
@@ -335,15 +330,15 @@ function StatCard({ num, label, color }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   heading: {
     paddingTop: 10,
     paddingHorizontal: 15,
     paddingBottom: 12,
   },
-  headingText: { fontSize: 25, fontWeight: "500", color: "#5d8366" },
-  subText: { fontSize: 14, color: "#7d7f7c" },
+  headingText: { fontSize: 25, fontWeight: "500", color: colors.heading },
+  subText: { fontSize: 14, color: colors.subText },
   card: {
     backgroundColor: colors.card,
     marginHorizontal: 16,
@@ -362,7 +357,7 @@ const styles = StyleSheet.create({
   },
   legendItem: { flexDirection: "row", alignItems: "center", gap: 6 },
   legendDot: { width: 10, height: 10, borderRadius: 5 },
-  legendDotOutline: { borderWidth: 1, borderColor: "#D8DED9" },
+  legendDotOutline: { borderWidth: 1, borderColor: colors.disabled },
   legendLabel: { fontSize: 12, color: colors.textMuted },
   statsGrid: {
     flexDirection: "row",
@@ -394,7 +389,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   verdictTagText: { fontSize: 12, fontWeight: "500" },
-  verdictMessage: { fontSize: 13, color: "#4C5C48" },
+  verdictMessage: { fontSize: 13, color: colors.body },
   logButton: {
     backgroundColor: "#8FC79D",
     marginHorizontal: 16,
@@ -409,13 +404,13 @@ const styles = StyleSheet.create({
   // Modal styles
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(36,59,40,0.35)",
+    backgroundColor: colors.backdrop,
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
   },
   modalCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.card,
     borderRadius: 18,
     padding: 20,
     width: "100%",
@@ -448,8 +443,8 @@ optionList: { gap: 8, marginBottom: 18 },
     padding: 10,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: "#E4E7DF",
-    backgroundColor: "#FFFFFF",
+    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
   checkbox: {
     width: 20,
@@ -458,16 +453,16 @@ optionList: { gap: 8, marginBottom: 18 },
     alignItems: "center",
     justifyContent: "center",
   },
-  checkboxEmpty: { borderWidth: 1.5, borderColor: "#C9D2C2" },
-  checkmark: { color: "#FFFFFF", fontSize: 13, fontWeight: "bold" },
-  optionLabel: { fontSize: 14, color: "#3C4A38" },
+  checkboxEmpty: { borderWidth: 1.5, borderColor: colors.checkboxBorder },
+  checkmark: { color: colors.card, fontSize: 13, fontWeight: "bold" },
+  optionLabel: { fontSize: 14, color: colors.optionLabel },
   modalActions: { flexDirection: "row", gap: 10 },
   cancelButton: {
     flex: 1,
     padding: 12,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: "#E4E7DF",
+    borderColor: colors.border,
     alignItems: "center",
   },
   cancelButtonText: { fontSize: 14, fontWeight: "500", color: colors.textMuted },
