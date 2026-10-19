@@ -27,16 +27,17 @@
     "plugins": [
       "expo-router",
       [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#F7F8F4",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "dark": {
-            "backgroundColor": "#202020"
-          }
+      "expo-splash-screen",
+      {
+        "backgroundColor": "#F7F8F4",
+        "image": "./assets/images/splash-icon.png",
+        "imageWidth": 200,
+        "dark": {
+          "backgroundColor": "#202020",
+          "image": "./assets/images/splash-icon.png"
         }
-      ],
+      }
+    ],
       "expo-sharing"
     ],
     "experiments": {
