@@ -20,6 +20,7 @@ export default function RootLayout() {
                 presentation: "modal",
               }}
             />
+            <Stack.Screen name="summary" options={{ headerShown: true, title: "Summary" }} />
           </Stack>
         </ProfileProvider>
       </EntriesProvider>

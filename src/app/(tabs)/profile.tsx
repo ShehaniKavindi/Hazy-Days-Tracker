@@ -108,6 +108,13 @@ export default function Profile() {
         </View>
 
         <TouchableOpacity
+          style={[styles.summaryButton, { borderColor: accentColor }]}
+          onPress={() => router.push("/summary")}
+        >
+          <Text style={[styles.summaryButtonText, { color: headingColor }]}>Summary</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[styles.editButton, { backgroundColor: accentColor }]}
           onPress={() => router.push("/edit-profile")}
         >
@@ -199,7 +206,15 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: colors.textMuted,
   },
-
+    summaryButton: {
+    marginHorizontal: 16,
+    marginTop: 20,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    padding: 14,
+    alignItems: "center",
+  },
+  summaryButtonText: { fontSize: 14, fontWeight: "500" },
   editButton: {
     backgroundColor: "#8FC79D",
     marginHorizontal: 16,

@@ -132,12 +132,31 @@ export function EntriesProvider({ children }) {
     return { counts, loggedDays };
   }
 
+    function getRangeCounts(startStr, endStr) {
+    const counts = { clean: 0, weed: 0, alcohol: 0, both: 0 };
+    let loggedDays = 0;
+    for (const [dateStr, state] of Object.entries(entries)) {
+      if (dateStr >= startStr && dateStr <= endStr) {
+        loggedDays++;
+        if (state === "both") {
+          counts.both++;
+          counts.weed++;
+          counts.alcohol++;
+        } else {
+          counts[state]++;
+        }
+      }
+    }
+    return { counts, loggedDays };
+  }
+
   const value = {
     entries,
     setEntry,
     clearAll,
     stats,
     getMonthCounts,
+    getRangeCounts,
     isHydrated,
   };
 
