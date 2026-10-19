@@ -62,7 +62,15 @@ function getMood(cleanRatio) {
 
 export default function Profile() {
   const router = useRouter();
-  const { stats, getMonthCounts } = useEntries();
+  const { stats, getMonthCounts, entries } = useEntries();
+
+  const firstEntry = Object.keys(entries).sort()[0];
+  let trackingSince = null;
+  if (firstEntry) {
+    const [y, m, d] = firstEntry.split("-").map(Number);
+    trackingSince = new Date(y, m - 1, d).toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  }
+
   const { profile } = useProfile();
   const { accentColor, headingColor, cleanDaysColor } = useSettings();
 
@@ -86,7 +94,9 @@ export default function Profile() {
             resizeMode="cover"
           />
           <Text style={[styles.name, { color: headingColor }]}>{profile.name}</Text>
-          <Text style={styles.subText}>Tracking since March 2025</Text>
+          <Text style={styles.subText}>
+            {trackingSince ? `Tracking since ${trackingSince}` : "Not tracking yet"}
+          </Text>
           {profile.goalNote ? (
             <Text style={styles.goalNote}>{profile.goalNote}</Text>
           ) : null}
@@ -107,12 +117,7 @@ export default function Profile() {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={[styles.summaryButton, { borderColor: accentColor }]}
-          onPress={() => router.push("/summary")}
-        >
-          <Text style={[styles.summaryButtonText, { color: headingColor }]}>Summary</Text>
-        </TouchableOpacity>
+        
 
         <TouchableOpacity
           style={[styles.editButton, { backgroundColor: accentColor }]}
@@ -120,6 +125,14 @@ export default function Profile() {
         >
           <Text style={styles.editButtonText}>Edit profile</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.summaryButton, { borderColor: accentColor }]}
+          onPress={() => router.push("/summary")}
+        >
+          <Text style={[styles.summaryButtonText, { color: headingColor }]}>Summary</Text>
+        </TouchableOpacity>
+
       </ScrollView>
     </SafeAreaView>
   );

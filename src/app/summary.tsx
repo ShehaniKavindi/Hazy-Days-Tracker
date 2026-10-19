@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.page },
   scrollContent: { paddingBottom: 28 },
 
-  chipRow: { paddingHorizontal: 16, paddingTop: 16, gap: 8 },
+  chipRow: { paddingHorizontal: 16, paddingTop: 18, gap: 8 },
   chip: {
     backgroundColor: colors.card,
     borderRadius: 16,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderRadius: 20,
     marginHorizontal: 16,
-    marginTop: 12,
+    marginTop: 20,
     paddingBottom: 6,
     overflow: "hidden",
   },
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 14,
   },
-  rangeLabel: { fontSize: 15, fontWeight: "600", color: colors.textPrimary },
+  rangeLabel: { fontSize: 15, fontWeight: "600", color: colors.textPrimary, marginTop: 10 },
   rangeDays: { fontSize: 13, color: colors.textMuted },
   hint: { fontSize: 12, color: colors.textMuted, marginHorizontal: 20, marginTop: 4 },
 
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 10,
     marginHorizontal: 16,
-    marginTop: 12,
+    marginTop: 16,
   },
   statCard: { borderRadius: 16, paddingVertical: 12, paddingHorizontal: 14, width: "47.5%" },
   statNum: { fontSize: 26, fontWeight: "600" },
