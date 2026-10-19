@@ -18,7 +18,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.shehanikavindidev.HazyDaysTracker"
+      "package": "com.shehanikavindidev.hazydaystracker"
     },
     "web": {
       "output": "static",
@@ -41,6 +41,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9b5d72b9-2f48-4c42-8f91-0647499e6c6f"
+      }
+    },
+    "owner": "shehanikavindi"
   }
 }
