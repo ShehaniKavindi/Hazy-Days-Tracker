@@ -1,4 +1,5 @@
-import { Text, View, SafeAreaView, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useSettings, useStyles } from "@/context/SettingsContext";
 import { useEntries } from "@/context/EntriesContext";
