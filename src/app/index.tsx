@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { Redirect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSettings } from "@/context/SettingsContext";
 
 const ONBOARDED_KEY = "hazy-days:onboarded";
 
 export default function StartGate() {
+  const { colors } = useSettings();
   const [checking, setChecking] = useState(true);
   const [onboarded, setOnboarded] = useState(false);
 
@@ -24,7 +26,7 @@ export default function StartGate() {
 
   if (checking) {
     return (
-      <View style={styles.loading}>
+      <View style={[styles.loading, { backgroundColor: colors.page }]}>
         <ActivityIndicator size="large" color="#8FC79D" />
       </View>
     );
